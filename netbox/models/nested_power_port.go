@@ -39,7 +39,7 @@ type NestedPowerPort struct {
 	Occupied *bool `json:"_occupied,omitempty"`
 
 	// Cable
-	Cable *int64 `json:"cable,omitempty"`
+	Cable *NestedCable `json:"cable,omitempty"`
 
 	// device
 	Device *NestedDevice `json:"device,omitempty"`
