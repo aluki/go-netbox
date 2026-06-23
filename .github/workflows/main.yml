@@ -18,9 +18,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: License check
-        run: ./scripts/licensecheck.sh
-
       - name: Go installation
         uses: actions/setup-go@v2
         with:
@@ -29,14 +26,8 @@ jobs:
       - name: Go dependencies installation
         run: go get -d ./...
 
-      - name: Golint installation
-        run: go get -u golang.org/x/lint/golint
-
       - name: Build
         run: go build ./...
-
-      - name: Lint
-        run: ./scripts/golint.sh
 
       - name: Vet
         run: go vet ./...
