@@ -9383,7 +9383,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/DeviceRole"
+              "$ref": "#/definitions/WritableDeviceRole"
             }
           }
         ],
@@ -9441,7 +9441,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/DeviceRole"
+              "$ref": "#/definitions/WritableDeviceRole"
             }
           }
         ],
@@ -9473,7 +9473,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/DeviceRole"
+              "$ref": "#/definitions/PatchedWritableDeviceRole"
             }
           }
         ],
@@ -73842,9 +73842,15 @@
           "maxLength": 200
         },
         "parent": {
-          "title": "Parent ID",
-          "type": "integer",
-          "x-nullable": true
+          "title": "Parent",
+          "type": "object",
+          "x-nullable": true,
+          "properties": {
+            "id": {
+              "title": "ID",
+              "type": "integer"
+            }
+          }
         },
         "tags": {
           "type": "array",
@@ -73880,6 +73886,115 @@
           "title": "Virtualmachine count",
           "type": "integer",
           "readOnly": true
+        }
+      }
+    },
+    "WritableDeviceRole": {
+      "required": [
+        "name",
+        "slug"
+      ],
+      "type": "object",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "maxLength": 100,
+          "minLength": 1
+        },
+        "slug": {
+          "title": "Slug",
+          "type": "string",
+          "format": "slug",
+          "pattern": "^[-a-zA-Z0-9_]+$",
+          "maxLength": 100,
+          "minLength": 1
+        },
+        "color": {
+          "title": "Color",
+          "type": "string",
+          "pattern": "^[0-9a-f]{6}$",
+          "maxLength": 6,
+          "minLength": 1
+        },
+        "vm_role": {
+          "title": "VM Role",
+          "description": "Virtual machines may be assigned to this role",
+          "type": "boolean"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string",
+          "maxLength": 200
+        },
+        "parent": {
+          "title": "Parent ID",
+          "type": "integer",
+          "x-nullable": true
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NestedTag"
+          }
+        },
+        "custom_fields": {
+          "title": "Custom fields",
+          "type": "object",
+          "default": {}
+        }
+      }
+    },
+    "PatchedWritableDeviceRole": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "maxLength": 100,
+          "minLength": 1
+        },
+        "slug": {
+          "title": "Slug",
+          "type": "string",
+          "format": "slug",
+          "pattern": "^[-a-zA-Z0-9_]+$",
+          "maxLength": 100,
+          "minLength": 1
+        },
+        "color": {
+          "title": "Color",
+          "type": "string",
+          "pattern": "^[0-9a-f]{6}$",
+          "maxLength": 6,
+          "minLength": 1
+        },
+        "vm_role": {
+          "title": "VM Role",
+          "description": "Virtual machines may be assigned to this role",
+          "type": "boolean"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string",
+          "maxLength": 200
+        },
+        "parent": {
+          "title": "Parent ID",
+          "type": "integer",
+          "x-nullable": true,
+          "x-omitempty": false
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NestedTag"
+          }
+        },
+        "custom_fields": {
+          "title": "Custom fields",
+          "type": "object",
+          "default": {}
         }
       }
     },

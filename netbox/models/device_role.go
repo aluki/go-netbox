@@ -76,8 +76,8 @@ type DeviceRole struct {
 	// Min Length: 1
 	Name *string `json:"name"`
 
-	// Parent ID
-	Parent *int64 `json:"parent,omitempty"`
+	// parent
+	Parent *DeviceRoleParent `json:"parent,omitempty"`
 
 	// Slug
 	// Required: true
@@ -125,6 +125,10 @@ func (m *DeviceRole) Validate(formats strfmt.Registry) error {
 	}
 
 	if err := m.validateName(formats); err != nil {
+		res = append(res, err)
+	}
+
+	if err := m.validateParent(formats); err != nil {
 		res = append(res, err)
 	}
 
@@ -219,6 +223,25 @@ func (m *DeviceRole) validateName(formats strfmt.Registry) error {
 	return nil
 }
 
+func (m *DeviceRole) validateParent(formats strfmt.Registry) error {
+	if swag.IsZero(m.Parent) { // not required
+		return nil
+	}
+
+	if m.Parent != nil {
+		if err := m.Parent.Validate(formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("parent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("parent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *DeviceRole) validateSlug(formats strfmt.Registry) error {
 
 	if err := validate.Required("slug", "body", m.Slug); err != nil {
@@ -302,6 +325,10 @@ func (m *DeviceRole) ContextValidate(ctx context.Context, formats strfmt.Registr
 		res = append(res, err)
 	}
 
+	if err := m.contextValidateParent(ctx, formats); err != nil {
+		res = append(res, err)
+	}
+
 	if err := m.contextValidateTags(ctx, formats); err != nil {
 		res = append(res, err)
 	}
@@ -365,6 +392,27 @@ func (m *DeviceRole) contextValidateLastUpdated(ctx context.Context, formats str
 	return nil
 }
 
+func (m *DeviceRole) contextValidateParent(ctx context.Context, formats strfmt.Registry) error {
+
+	if m.Parent != nil {
+
+		if swag.IsZero(m.Parent) { // not required
+			return nil
+		}
+
+		if err := m.Parent.ContextValidate(ctx, formats); err != nil {
+			if ve, ok := err.(*errors.Validation); ok {
+				return ve.ValidateName("parent")
+			} else if ce, ok := err.(*errors.CompositeError); ok {
+				return ce.ValidateName("parent")
+			}
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *DeviceRole) contextValidateTags(ctx context.Context, formats strfmt.Registry) error {
 
 	for i := 0; i < len(m.Tags); i++ {
@@ -419,6 +467,43 @@ func (m *DeviceRole) MarshalBinary() ([]byte, error) {
 // UnmarshalBinary interface implementation
 func (m *DeviceRole) UnmarshalBinary(b []byte) error {
 	var res DeviceRole
+	if err := swag.ReadJSON(b, &res); err != nil {
+		return err
+	}
+	*m = res
+	return nil
+}
+
+// DeviceRoleParent Parent
+//
+// swagger:model DeviceRoleParent
+type DeviceRoleParent struct {
+
+	// ID
+	ID int64 `json:"id,omitempty"`
+}
+
+// Validate validates this device role parent
+func (m *DeviceRoleParent) Validate(formats strfmt.Registry) error {
+	return nil
+}
+
+// ContextValidate validates this device role parent based on context it is used
+func (m *DeviceRoleParent) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+	return nil
+}
+
+// MarshalBinary interface implementation
+func (m *DeviceRoleParent) MarshalBinary() ([]byte, error) {
+	if m == nil {
+		return nil, nil
+	}
+	return swag.WriteJSON(m)
+}
+
+// UnmarshalBinary interface implementation
+func (m *DeviceRoleParent) UnmarshalBinary(b []byte) error {
+	var res DeviceRoleParent
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
