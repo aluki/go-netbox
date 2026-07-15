@@ -76,6 +76,9 @@ type DeviceRole struct {
 	// Min Length: 1
 	Name *string `json:"name"`
 
+	// Parent ID
+	Parent *int64 `json:"parent,omitempty"`
+
 	// Slug
 	// Required: true
 	// Max Length: 100
